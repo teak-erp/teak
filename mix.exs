@@ -12,17 +12,20 @@ defmodule Teak.MixProject do
   end
 
   # Run "mix help compile.app" to learn about applications.
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
+  # def application do
+  #   [
+  #     extra_applications: [:logger]
+  #   ]
+  # end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:spark, path: "../../spark", override: true},
+      {:ash, path: "../../ash", override: true},
+      {:ash_postgres, "~> 1.1.1"},
+
+      {:elixir_sense, github: "elixir-lsp/elixir_sense", only: [:dev, :test], override: true},
     ]
   end
 end
