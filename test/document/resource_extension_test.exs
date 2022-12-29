@@ -6,6 +6,21 @@ defmodule Teak.Test.Document.ResourceExtensionTest do
     use AshPostgres.Repo, otp_app: :teak
   end
 
+  defmodule Customizations do
+    use Teak.Document.Customizations
+
+    customizations do
+
+      customize Teak.Test.Document.ResourceExtensionTest.DocumentResource do
+        attribute :name, :string
+      end
+
+      customize Teak.Test.Document.ResourceExtensionTest.OwnedDocument do
+        attribute :document_name, :string
+      end
+    end
+  end
+
   defmodule DocumentResource do
     use Teak.Document
 
@@ -54,6 +69,7 @@ defmodule Teak.Test.Document.ResourceExtensionTest do
     end
   end
 
+
   describe "document DSL tests" do
     test "document display properties" do
       assert "Doc Resource" == Teak.Document.ResourceExtension.name(DocumentResource)
@@ -66,13 +82,18 @@ defmodule Teak.Test.Document.ResourceExtensionTest do
     end
 
     test "audit fields" do
-      assert nil != Ash.Resource.Info.attribute(DocumentResource, :created_at)
-      assert nil != Ash.Resource.Info.attribute(DocumentResource, :updated_at)
+      assert %Ash.Resource.Attribute{} = Ash.Resource.Info.attribute(DocumentResource, :created_at)
+      assert %Ash.Resource.Attribute{} = Ash.Resource.Info.attribute(DocumentResource, :updated_at)
 
       assert nil == Ash.Resource.Info.attribute(DocumentResource, :updated_by)
-      assert nil != Ash.Resource.Info.attribute(DocumentResource, :created_by)
+      assert %Ash.Resource.Attribute{} != Ash.Resource.Info.attribute(DocumentResource, :created_by)
 
-      assert nil != Ash.Resource.Info.attribute(OwnedDocument, :owner)
+      assert %Ash.Resource.Attribute{} != Ash.Resource.Info.attribute(OwnedDocument, :owner)
+    end
+
+    test "customizations" do
+      assert %Ash.Resource.Attribute{} = Ash.Resource.Info.attribute(DocumentResource, :name)
+      assert %Ash.Resource.Attribute{} = Ash.Resource.Info.attribute(OwnedDocument, :document_name)
     end
 
   end

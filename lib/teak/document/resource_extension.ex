@@ -51,7 +51,7 @@ defmodule Teak.Document.ResourceExtension do
     sections: [@document],
     transformers: [
       Teak.Document.Transformers.Defaults,
-      # Teak.Document.Transformers.Customizations
+      Teak.Document.Transformers.Customizations
     ]
 
   @moduledoc """
